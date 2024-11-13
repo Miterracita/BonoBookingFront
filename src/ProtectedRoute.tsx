@@ -12,17 +12,17 @@ const ProtectedRoute = ({ isAdminRequired = false }:ProtectedRouteProps ) => {
     return <Navigate to="/" replace />; // Redirige al login si no está autenticado
   }
 
-  const userRole = getUserRole(); //obtiene el rol del token
+  const userRole = getUserRole(); //obtiene el rol de usuario del token
 
   if (isAdminRequired && userRole !== "admin") {
     return <Navigate to="/home" replace />; // Redirige a /home si el usuario no es admin
   }
 
-  if (!isAdminRequired && userRole === "admin") {
-    return <Navigate to="/gestion-usuarios" replace />; // Redirige a /gestion-usuarios si es admin
-  }
+  // if (!isAdminRequired && userRole === "admin") {
+  //   return <Navigate to="/gestion-usuarios" replace />; // Redirige a /gestion-usuarios si es admin
+  // }
 
-  return <Outlet />; // Si se cumple la condición, permite el acceso a la ruta
+  return <Outlet />; // Si el usuario está identificado, tanto user como admin, permite el acceso a la ruta
 
 };
 

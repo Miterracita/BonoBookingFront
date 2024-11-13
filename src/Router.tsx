@@ -3,18 +3,18 @@ import ProtectedRoute from './ProtectedRoute.tsx';
 
 // componentes a los que redirigen las rutas
 import Login from './pages/Login/Login.js';
-import NewRegister from './pages/NewRegister/NewRegister.tsx';
 
 import Home from './pages/Home/Home.tsx';
 
-// import NewBooking from './pages/NewBooking/NewBooking.js';
 import NewBono from './pages/NewBono/NewBono.tsx';
 import NewEvent from './pages/NewEvent/NewEvent.tsx';
+import NewBooking from './pages/NewBooking/NewBooking.tsx';
 
 import UsersList from './pages/UsersList/UsersList.tsx';
 import BonoList from './pages/BonoList/BonoList.tsx';
 import BookingList from './pages/BookingList/BookingList.tsx';
 import EventList from './pages/EventList/EventList.tsx';
+import NewRegister from './pages/NewRegister/NewRegister.tsx';
 
 
 // Configuración del router
@@ -32,9 +32,17 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,// Solo usuarios autenticados
     children: [
       { path: '/home', element: <Home /> },
-      // { path: '/new-booking', element: <NewBooking /> },
     ],
   },
+  {
+    element: <ProtectedRoute />, // Solo usuarios autenticados
+    children: [
+      { path: '/home', element: <Home /> },
+      // Rutas compartidas entre identificados y admin
+      { path: '/new-booking', element: <NewBooking /> },
+    ],
+  },
+
   {
     element: <ProtectedRoute isAdminRequired={true} />,// Solo admin
     children: [

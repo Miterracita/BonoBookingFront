@@ -1,5 +1,6 @@
 // url producción
-const API_URL = "https://bono-booking-back.vercel.app";
+// const API_URL = "https://bono-booking-back.vercel.app";
+const API_URL = "http://localhost:3000";
 
 
 // url local
