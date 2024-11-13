@@ -9,7 +9,7 @@ import './Booking.css';
 
 import useCommonReducer from '../../../reducers/useCommonReducer.js';
 
-import { deleteBooking, updateBooking } from '../../../services/apiServicesBookings.js';
+import { deleteBooking } from '../../../services/apiServicesBookings.js';
 import FormBooking from '../../Forms/FormBooking/FormBooking.js';
 import Modal from '../../Modal/Modal.js';
 
@@ -51,7 +51,7 @@ const Booking = memo (({
         setError,
         setNotification,
         showModal,
-        // hideModal,
+        hideModal,
         clearMessages,
       } = useCommonReducer();
 
