@@ -5,3 +5,55 @@
     padding: 30px 150px;
     border-radius: 10px;
 }
+
+.box-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+.box-title svg {
+    fill: var(--background-two);
+}
+.box-booking-form h2 {
+    font-size: 30px;
+    color: var(--background-two);
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    margin-bottom: 0px;
+}
+.box-booking-form h2 span{
+    font-family: "Ubuntu", sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.box-form-booking {
+    padding: 50px;
+    border: 1px solid white;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 10px 10px 25px 8px rgba(230,230,230,1);
+}
+.box-form-booking h3 {
+    font-size: 20px;
+    color: var(--background-one);
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+.f-booking-item {
+    margin: 10px;
+}
+.f-booking-item input{
+    margin-right: 10px;
+}
+/* mobile */
+@media (max-width: 767px) {
+    .box-booking-form {
+        padding: 0px;
+    }
+    .box-form-booking {
+        margin-bottom: 30px;
+    }
+}
