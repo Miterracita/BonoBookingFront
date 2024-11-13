@@ -1,15 +1,15 @@
 
-import { useCallback, useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from 'react-router-dom'; // Para hacer una redirección
-import Button from '../../Button/Button';
-import Notification from '../../Notification/Notification';
+// import { useCallback, useState, useEffect } from "react";
+// import { useForm } from "react-hook-form";
+// import { useNavigate } from 'react-router-dom'; // Para hacer una redirección
+// import Button from '../../Button/Button';
+// import Notification from '../../Notification/Notification';
 
 import './FormBooking.css';
 
-import { newBooking, updateBooking } from "../../../services/apiServicesBookings";
-import { getUsers } from "../../../services/apiServicesUsers";
-import { getBono } from "../../../services/apiServicesBonos";
+// import { newBooking, updateBooking } from "../../../services/apiServicesBookings";
+// import { getUsers } from "../../../services/apiServicesUsers";
+// import { getBono } from "../../../services/apiServicesBonos";
 import { getEvents } from "../../../services/apiServicesEvents";
 
 export interface UserData {
@@ -50,112 +50,112 @@ interface FormBookingProps {
 const FormBooking = ({
     bookingId,
     initialData,
-    onClose
+    // onClose
 }: FormBookingProps) => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
-    const navigate = useNavigate(); // Hook para redirigir
+    // const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    // const navigate = useNavigate(); // Hook para redirigir
 
-    const [users, setUsers] = useState<UserData[]>([]); 
-    const [bonos, setBonos] = useState<string[]>([]);
-    const [events, setEvents] = useState<string[]>([]);
-    const [notification, setNotification] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    // // const [users, setUsers] = useState<UserData[]>([]); 
+    // // const [bonos, setBonos] = useState<string[]>([]);
+    // const [events, setEvents] = useState<string[]>([]);
+    // const [notification, setNotification] = useState<string | null>(null);
+    // const [error, setError] = useState<string | null>(null);
 
     // Para poder realizar la reserva es necesario cargar previamente la info
     // de usuarios, bonos y eventos
 
-    // Fetch users from the API
-    const fetchAllUsers = async () => {
-        try {
-            const usersData = await getUsers();
-            setUsers(usersData);
-        } catch (error: any) {
-            setError(error.message || 'Error fetching user');
-        }
-    };
+    // // Fetch users from the API
+    // const fetchAllUsers = async () => {
+    //     try {
+    //         const usersData = await getUsers();
+    //         setUsers(usersData);
+    //     } catch (error: any) {
+    //         setError(error.message || 'Error fetching user');
+    //     }
+    // };
 
-    // Fetch bono types from the API
-    const fetchBonos = async () => {
-        try {
-            const bonoData = await getBono();
-            setBonos(bonoData);
-        } catch (error:any) {
-            setError(error.message || 'Error fetching bono');
-        }
-    };
+    // // Fetch bono types from the API
+    // const fetchBonos = async () => {
+    //     try {
+    //         const bonoData = await getBono();
+    //         setBonos(bonoData);
+    //     } catch (error:any) {
+    //         setError(error.message || 'Error fetching bono');
+    //     }
+    // };
 
-    //fetch al listado de eventos
-    const fetchEvents = async () => {
-        try {
-            const eventsData = await getEvents();
-            setEvents(eventsData);
-        } catch (error:any) {
-            setError(error.message || 'Error fetching events');
-        }
-    };
+    // //fetch al listado de eventos
+    // const fetchEvents = async () => {
+    //     try {
+    //         const eventsData = await getEvents();
+    //         setEvents(eventsData);
+    //     } catch (error:any) {
+    //         setError(error.message || 'Error fetching events');
+    //     }
+    // };
 
-    useEffect(() => {
-        fetchAllUsers();
-        fetchBonos();
-        fetchEvents();
-    }, []);
-
-
-
-    useEffect(() => {
-
-        // Si bookingId está presente, estamos editando; de lo contrario, estamos creando una nueva reserva
-        if (bookingId) {
-            reset(initialData);  // Resetea el formulario con los datos de la reserva a editar
-        } else {
-            // Si es un nueva nueva reserva los datos se resetean
-            reset();
-        }
-    }, [bookingId, initialData, reset]);
+    // useEffect(() => {
+    //     // fetchAllUsers();
+    //     // fetchBonos();
+    //     fetchEvents();
+    // }, []);
 
 
-    //submit del formulario de edición o creación de nueva reserva
-    const onSubmit = useCallback(async (formData:any) => {
+
+    // useEffect(() => {
+
+    //     // Si bookingId está presente, estamos editando; de lo contrario, estamos creando una nueva reserva
+    //     if (bookingId) {
+    //         reset(initialData);  // Resetea el formulario con los datos de la reserva a editar
+    //     } else {
+    //         // Si es un nueva nueva reserva los datos se resetean
+    //         reset();
+    //     }
+    // }, [bookingId, initialData, reset]);
+
+
+    // //submit del formulario de edición o creación de nueva reserva
+    // const onSubmit = useCallback(async (formData:any) => {
                 
-        try {
-            if (bookingId) {
-                // Actualiza el bono si existe bonoId
-                await updateBooking(bookingId, formData);
-                setNotification(`Reserva actualizada correctamente`);
+    //     try {
+    //         if (bookingId) {
+    //             // Actualiza el bono si existe bonoId
+    //             await updateBooking(bookingId, formData);
+    //             setNotification(`Reserva actualizada correctamente`);
 
-                {onClose && (
-                    setTimeout(() => {
-                        onClose();
-                    }, 2000)
-                )}
+    //             {onClose && (
+    //                 setTimeout(() => {
+    //                     onClose();
+    //                 }, 2000)
+    //             )}
 
-            } else {
-                // Crea un nuevo bono si no existe bonoId
-                await newBooking(formData);
-                console.log(`Reserva creada correctamente`);
-                setNotification(`Reserva creada correctamente`);
+    //         } else {
+    //             // Crea un nuevo bono si no existe bonoId
+    //             await newBooking(formData);
+    //             console.log(`Reserva creada correctamente`);
+    //             setNotification(`Reserva creada correctamente`);
 
-                setTimeout(() => {
-                    navigate('/gestion-reservas'); // Redirige después de crear el bono
-                }, 2000)               
-            }
+    //             setTimeout(() => {
+    //                 navigate('/gestion-reservas'); // Redirige después de crear el bono
+    //             }, 2000)               
+    //         }
         
-            } catch (error: any) {
-                console.error('Error:', error);
-                setError(error.message || (bookingId ? 'Error al actualizar la reserva' : 'Error al crear la reserva'));
-        }
-    }, [bookingId, navigate, onClose]);
+    //         } catch (error: any) {
+    //             console.error('Error:', error);
+    //             setError(error.message || (bookingId ? 'Error al actualizar la reserva' : 'Error al crear la reserva'));
+    //     }
+    // }, [bookingId, navigate, onClose]);
 
-    //cerrar las notificaciones
-    const handleCloseNotification = useCallback(() => { 
-        setError(null);
-        setNotification(null);
-    }, []);
+    // //cerrar las notificaciones
+    // const handleCloseNotification = useCallback(() => { 
+    //     setError(null);
+    //     setNotification(null);
+    // }, []);
 
   return (
     <div className="box-booking-form">
-        {notification && <Notification message={notification} type="success" onClose={handleCloseNotification}/>}
-        {error && <Notification message={error} type="error" onClose={handleCloseNotification}/>}
+        {/* {notification && <Notification message={notification} type="success" onClose={handleCloseNotification}/>}
+        {error && <Notification message={error} type="error" onClose={handleCloseNotification}/>} */}
 
         <div className='box-title'>
             <div className='icon'>
@@ -165,39 +165,41 @@ const FormBooking = ({
             </div>
             <h2><span>{bookingId ? 'Update' : 'New'}</span> Booking</h2>
             </div>
-            <form className="box-form-booking" id="bookingForm" onSubmit={handleSubmit(onSubmit)}>
-                <div className='flex'>                
-                    <div className='box-item'>
-                        <label>Eventos disponibles: </label>
-                        <input type="text" id="evento" {...register("evento", {
-                            required: {
-                                value: true,
-                                message: "Necesitas seleccionar un evento para poder continuar"
-                            },
-                        })}
-                        />
-                        {/* <select id="event" {...register("event", {
-                            required: {
-                                value: true,
-                                message: "Necesitas seleccionar un evento"
-                            },
-                        })}
-                        style={{ borderColor: errors.type ? "red" : "" }}>
-                            <option value="">Eventos disponibles.</option>
-                            {events.map(event => (
-                                <option key={event._id} value={event}>{event}</option>
-                            ))}
-                        </select> */}
-                    </div>
-                
-                </div>
-                     <div style={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
-                         <Button text="Guardar" color="dark" type="submit"/>
-                    </div>
-            </form>
-
+            
     </div>
   )
 };
 
 export default FormBooking;
+
+
+// <form className="box-form-booking" id="bookingForm" onSubmit={handleSubmit(onSubmit)}>
+//                 <div className='flex'>                
+//                     <div className='box-item'>
+//                         <label>Eventos disponibles: </label>
+//                         <input type="text" id="evento" {...register("evento", {
+//                             required: {
+//                                 value: true,
+//                                 message: "Necesitas seleccionar un evento para poder continuar"
+//                             },
+//                         })}
+//                         />
+//                         {/* <select id="event" {...register("event", {
+//                             required: {
+//                                 value: true,
+//                                 message: "Necesitas seleccionar un evento"
+//                             },
+//                         })}
+//                         style={{ borderColor: errors.type ? "red" : "" }}>
+//                             <option value="">Eventos disponibles.</option>
+//                             {events.map(event => (
+//                                 <option key={event._id} value={event}>{event}</option>
+//                             ))}
+//                         </select> */}
+//                     </div>
+                
+//                 </div>
+//                      <div style={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
+//                          <Button text="Guardar" color="dark" type="submit"/>
+//                     </div>
+//             </form>
