@@ -2,96 +2,104 @@
 import { useCallback, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom'; // Para hacer una redirección
+
 import Button from '../../Button/Button';
 import Notification from '../../Notification/Notification';
+import BonoUsers from "../../Items/BonoUser/BonoUser";
+
+import { BonoData, EventData, FormBookingProps, UserData } from './types/index';
+import { formatDate } from "../../../utils/date";
 
 import './FormBooking.css';
 
 import { newBooking, updateBooking } from "../../../services/apiServicesBookings";
-// import { getUsers } from "../../../services/apiServicesUsers";
-// import { getBono } from "../../../services/apiServicesBonos";
+import { getUserToken } from "../../../services/apiServicesUsers";
+import { getBonosByUserId } from "../../../services/apiServicesBonos";
 import { getEvents } from "../../../services/apiServicesEvents";
 
-export interface UserData {
-    _id: string;
-    userName: string;
-    email: string;
-    rol: string;
-}
-
-export interface BonoData {
-    user?: UserData;
-    expirationDate?: string;
-    type?: string;
-}
-
-interface EventData {
-    _id: string;
-    name: string;
-    description?: string;
-    date: string;
-    hour: number;
-    capacity?: number;
-}
-
-export interface BookingData {
-    _id?: string;
-    localizador?: string;
-    eventos?: EventData[];
-    bono?: BonoData[];
-}
-
-interface FormBookingProps {
-    bookingId?: string;
-    initialData?: BookingData;
-    onClose?: () => void;
-}
 
 const FormBooking = ({
     bookingId,
     initialData,
     onClose
 }: FormBookingProps) => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm(); // Formulario
     const navigate = useNavigate(); // Hook para redirigir
 
-    // const [bonos, setBonos] = useState<string[]>([]);
-    const [events, setEvents] = useState<string[]>([]);
+    const [bonos, setBonos] = useState<BonoData[] | null>(null);
+    const [user, setUser] = useState<UserData | null>(null);
+    const [events, setEvents] = useState<EventData[]>([]);
+
     const [notification, setNotification] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    const [loading, setLoading] = useState(false);
+
     // Para poder realizar la reserva es necesario cargar previamente la info
-    // de bonos y eventos
+    // de usuarios, bonos y eventos
 
+    // Sacamos la info del usuario que se ha identificado del token
+    const fetchUserData = async () => {
+        const token = localStorage.getItem("token"); // O la manera en que almacenas el token
 
-    // // Fetch bono types from the API
-    // const fetchBonos = async () => {
-    //     try {
-    //         const bonoData = await getBono();
-    //         setBonos(bonoData);
-    //     } catch (error:any) {
-    //         setError(error.message || 'Error fetching bono');
-    //     }
-    // };
+        if (token) {
+            try {
+                const userData = await getUserToken(token);
+                setUser(userData); // Guarda los datos del usuario en el contexto
+                console.log(`El usuario identificado es ${userData.userName}`);
+            } catch (error) {
+                console.error("Error al obtener los datos del usuario:", error);
+                setError("No se pudo obtener la información del usuario.");
+            }
+        }
+    };
 
+    const fetchBonos = async () => {
+        if (user && user._id) {
+          try {
+            const bonosData = await getBonosByUserId(user._id); // Llamada al servicio para obtener los bonos
+            setBonos(bonosData);
+            
+            console.log("Bonos asignados al usuario:", bonosData);
+      
+            if (!bonosData || bonosData.length === 0) {
+                setError("No tienes ningún bono disponible para realizar una reserva.");
+            }
+          } catch (error) {
+            console.error("Error fetching bonos:", error);
+            setError("Hubo un problema al obtener los bonos del usuario. Por favor, intenta de nuevo.");
+          }
+        }
+      };
+      
+    
     //fetch al listado de eventos
     const fetchEvents = async () => {
         try {
             const eventsData = await getEvents();
-            const eventName: string[] = eventsData.map((event:any) => event.name);
-            setEvents(eventName);
+            setEvents(eventsData);
             console.log(eventsData);
-        } catch (error:any) {
+        } catch (error: any) {
             setError(error.message || 'Error fetching events');
         }
     };
 
+    //buscamos si el usuario tiene algún bono asignado
     useEffect(() => {
-        // fetchBonos();
-        fetchEvents();
+        const fetchData = async () => {
+            await fetchUserData();
+            await fetchBonos();
+            await fetchEvents();
+        };
+    
+        fetchData();
     }, []);
 
-
+    useEffect(() => {
+        if (user) {
+            fetchBonos();
+        }
+    }, [user]);
 
     useEffect(() => {
 
@@ -106,9 +114,29 @@ const FormBooking = ({
 
 
     //submit del formulario de edición o creación de nueva reserva
-    const onSubmit = useCallback(async (formData:any) => {
-                
+    const onSubmit = useCallback(async (formData: any) => {
+        setLoading(true);
+
+        // Verificar los datos antes de enviar
+        console.log("Datos del formulario:", formData); 
+
+        // Obtener el `id` del evento y del bono seleccionado
+        const { eventId, bonoId } = formData;
+
+        if (!bonoId) {
+            console.error("No se seleccionó un bono.");
+            setError("Por favor, selecciona un bono antes de continuar.");
+            setLoading(false);
+            return;
+        }
+
         try {
+            const bookingData = {
+                eventId,
+                bonoId,
+                // Otros datos de la reserva, si son necesarios
+            };
+
             if (bookingId) {
                 // Actualiza el bono si existe bonoId
                 await updateBooking(bookingId, formData);
@@ -122,8 +150,7 @@ const FormBooking = ({
 
             } else {
                 // Crea un nuevo bono si no existe bonoId
-                await newBooking(formData);
-                console.log(`Reserva creada correctamente`);
+                await newBooking(bookingData);
                 setNotification(`Reserva creada correctamente`);
 
                 setTimeout(() => {
@@ -134,6 +161,8 @@ const FormBooking = ({
             } catch (error: any) {
                 console.error('Error:', error);
                 setError(error.message || (bookingId ? 'Error al actualizar la reserva' : 'Error al crear la reserva'));
+        } finally {
+            setLoading(false);
         }
     }, [bookingId, navigate, onClose]);
 
@@ -155,25 +184,81 @@ const FormBooking = ({
                 </svg>
             </div>
             <h2><span>{bookingId ? 'Update' : 'New'}</span> Booking</h2>
+        </div>
+        <div>
+            {user && (
+                <h3>Te has identificado como {user.userName}. Estos son tus bonos:</h3>
+            )}
+            <div>
+                {bonos ? (
+                    bonos.map((bono: any) => (
+                        <BonoUsers 
+                            key={bono._id}
+                            type={bono.type}
+                            active={bono.active}
+                            reservations={bono.reservations}
+                            id={bono._id}
+                            expirationDate={formatDate(bono.expirationDate)}
+                            name={bono.name}
+                            code={bono.code}
+                        />
+                    ))
+                ) : (
+                    <p>No tienes bonos disponibles.</p>
+                )}
             </div>
+        </div>
             <form className="box-form-booking" id="bookingForm" onSubmit={handleSubmit(onSubmit)}>               
                 <div>
                     <h3>Selecciona el evento sobre el que quieres realizar la reserva: </h3>
-
-                    <div className="f-box-events">
-                        {events.map(eventName => (
-                            <label>
+                    <div>
+                        {events.map(eventsData => (
+                            <label key={eventsData._id}>
                                 <div className="f-booking-item">
-                                    <input type="radio" value={eventName} {...register("event")} />
-                                    {eventName}
+                                    <input
+                                        type="radio"
+                                        value={eventsData._id}
+                                        {...register("eventId", { required: "Selecciona un evento antes de continuar" })}
+                                        style={{ borderColor: errors.type ? "red" : "" }}
+                                    />
+                                    <p>{eventsData.name} - <span>{formatDate(eventsData.date)}</span></p>
+                                    <p style={{color: 'red', visibility: errors.type ? 'visible' : 'hidden'}}>
+                                        {errors.eventId && <span>{errors.eventId.message as string}</span>}
+                                    </p>
                                 </div>
                             </label>
                         ))}
                     </div>
                 </div>
-                    <div style={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
-                        <Button text="Guardar" color="dark" type="submit"/>
+                <h3>Selecciona el bono que deseas utilizar:</h3>
+                <div>
+                    {bonos ? (
+                        bonos.map((bono) => (
+                            <div key={bono._id}>
+                                <div className="f-booking-item">
+                                    <input
+                                        type="radio"
+                                        id={bono._id}
+                                        value={bono._id}
+                                        {...register("bonoId", { required: "Debes seleccionar un bono" })}
+                                    />
+                                    <label htmlFor={bono._id}>
+                                        {bono.name} - Código: {bono.code}
+                                    </label>
+                                    <p style={{color: 'red', visibility: errors.bonoId ? 'visible' : 'hidden'}}>
+                                        {errors.bonoId && <span>{errors.bonoId.message as string}</span>}
+                                    </p>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No tienes bonos disponibles.</p>
+                    )}
                 </div>
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>
+                    <Button text="Reservar" color="dark" type="submit"/>
+                </div>
+
             </form>
 
     </div>

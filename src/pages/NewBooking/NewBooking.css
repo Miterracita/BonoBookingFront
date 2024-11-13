@@ -2,3 +2,37 @@
     display: flex;
     padding: 30px;
 }
+.new-booking-page .secondary-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.new-booking-page .btn-new-booking {
+    list-style: none;
+}
+.new-booking-page .btn-new-booking  a {
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 14px;
+    border:1px solid var(--background-two);
+    background-color: var(--background-two);
+    padding: 10px 20px;
+    color: white;
+    transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.new-booking-pager .btn-new-booking  a:hover {
+    border:1px solid var(--background-one);
+    background-color: var(--background-one);
+}
+
+.new-booking-pager .link-box {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.new-booking-pager .link-box svg {
+    fill: white;
+}

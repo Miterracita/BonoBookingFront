@@ -1,6 +1,6 @@
 // url producción
 // const API_URL = "https://bono-booking-back.vercel.app";
-const API_URL = "https://bono-booking-back.vercel.app";
+const API_URL = "http://localhost:3000";
 
 
 // url local
@@ -18,6 +18,7 @@ export const newBooking = async (data:any) => {
   };
 
   try {
+    console.log("Enviando datos de la reserva:", data);
     const response = await fetch(`${API_URL}/bookings/new-booking`, opciones);
     if (!response.ok) {
       throw new Error("Error al crear la reserva");

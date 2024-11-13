@@ -1,6 +1,6 @@
 // url producción
 // const API_URL = "https://bono-booking-back.vercel.app";
-const API_URL = "https://bono-booking-back.vercel.app";
+const API_URL = "http://localhost:3000";
 // url local
 // const LOCAL_URL = "http://localhost:3000";
 
@@ -18,6 +18,30 @@ export const getUsers = async () => {
       throw error;
   }
 };
+
+//ver info del usuario por id (se obtiene del token en el back)
+export const getUserToken = async (token: string) => {
+  try {
+    const response = await fetch(`${API_URL}/users/me`, { 
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}` // Pasas el token
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos del usuario');
+    }
+
+    const data = await response.json();
+    return data;  // Devuelve los datos del usuario
+  } catch (error) {
+    console.error('Error al obtener el usuario:', error);
+    throw error;  // Vuelve a lanzar el error para que puedas manejarlo más arriba
+  }
+};
+
+
 
 // actualizar un usuario (por ID)
 export const updateUser = async (id: any, userData: any) => {

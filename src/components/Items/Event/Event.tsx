@@ -5,6 +5,8 @@ import { AdminBoxButtons } from '../../AdminBoxButtons/AdminBoxButtons.js';
 import FormEvent from '../../Forms/FormEvent/FormEvent.js';
 import Modal from '../../Modal/Modal.js';
 
+import { formatDate } from '../../../utils/date.js';
+
 import './Event.css';
 
 import useCommonReducer from '../../../reducers/useCommonReducer.js';
@@ -80,7 +82,7 @@ export const Event = memo (({
                     <div className='info-event'>
                         <h3><span>{nombre}</span></h3>
                         <p><span>{descripcion}</span></p>
-                        <p>Fecha: <span>{fecha}</span></p>
+                        <p>Fecha: <span>{formatDate(fecha)}</span></p>
                         <p>Hora: <span>{hora}</span></p>                      
                         <p>Plazas: <span>{capacidad}</span></p>
                     </div>

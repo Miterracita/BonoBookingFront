@@ -1,6 +1,6 @@
 // url producción
 // const API_URL = "https://bono-booking-back.vercel.app";
-const API_URL = "https://bono-booking-back.vercel.app";
+const API_URL = "http://localhost:3000";
 
 
 // url local
@@ -112,4 +112,23 @@ export const getSearch = async (user: string, code: string) => {
         console.error('Error fetching bonos:', error);
         throw error;
     }
+};
+
+// Obtener bonos por ID de usuario
+export const getBonosByUserId = async (userId: any) => {
+  try {
+      // Realizar la llamada para obtener los bonos del usuario usando su ID
+      const response = await fetch(`${API_URL}/bonos/${userId}`); // Asegúrate de que esta sea la URL correcta para la API de bonos
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data; // Devuelve los bonos del usuario
+
+  } catch (error) {
+      console.error('Error fetching bonos:', error);
+      throw error; // Propaga el error si ocurre
+  }
 };

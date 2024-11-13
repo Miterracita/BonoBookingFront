@@ -5,6 +5,8 @@ import { AdminBoxButtons } from '../../AdminBoxButtons/AdminBoxButtons';
 import FormBono from '../../Forms/FormBono/FormBono.js';
 import Modal from '../../Modal/Modal.js';
 
+import { formatDate } from '../../../utils/date.js';
+
 import './Bono.css';
 
 import useCommonReducer from '../../../reducers/useCommonReducer.js';
@@ -121,7 +123,7 @@ const Bono = memo (({
                 <p>Asignado al usuario: <span>{user.userName}</span></p>
               )}
 
-              {expirationDate && (<p>Fecha caducidad: <span>{expirationDate}</span></p>)}
+              {expirationDate && (<p>Fecha caducidad: <span>{formatDate(expirationDate)}</span></p>)}
               {/* {reservations && (<p>Reservas: <span>{reservations}</span></p>)} */}
             </div>
 

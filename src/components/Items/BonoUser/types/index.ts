@@ -1,6 +1,11 @@
 
-// export interface BonoUsersTypes {
-//   type: number; // Número de clases en el bono
-//   active: boolean;
-//   reservations: number; // Número de reservas realizadas
-// }
+export interface BonoUsersTypes {
+  id: string;
+  name: string;
+  type: number,
+  active: boolean,
+  code: string,
+  totalUses: number | 0,
+  availableUses: number | 5,
+  expirationDate?: string,
+}

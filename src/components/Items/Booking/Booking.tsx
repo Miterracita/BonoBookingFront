@@ -63,7 +63,7 @@ const Booking = memo (({
         
         setTimeout(() =>{
             clearMessages();
-            refreshBookings();  // Llama a refreshBonos después de eliminar
+            refreshBookings();  // Llama a refreshBookings después de eliminar
             }, 3000);
             
         } catch (error: any) {

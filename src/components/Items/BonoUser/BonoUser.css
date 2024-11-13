@@ -1,16 +1,25 @@
-/* .c-bono {
+.c-bono-user {
     width: 400px;
+    padding: 20px;
     margin: 30px;
-    border: 1px solid var(--background-two);
+    border: 1px solid var(--background-one);
     border-radius: 10px;
     box-shadow: 2px 2px 2px 1px rgba(143, 143, 143, 0.2);
 }
+
 .top-flex {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-left: 30px;
+}
+.top-flex h4 {
+    font-weight: 600;
+    font-size: 25px;
+    color: var(--background-one);
 }
 .ico-state {
-    margin: 30px;
+    margin: 20px;
     position: relative;
 }
 .ico-activo:hover::after {
@@ -33,41 +42,35 @@
 .content {
     padding: 0 30px 30px 30px;
 }
-.content h3 {
-    font-weight: 600;
-    font-size: 30px;
-    color: var(--background-one);
-    text-align: center;
-}
 .content h5 {
     font-weight: 600;
     color: var(--background-one);
     margin-top:10px;
 }
-.box-clases {
+.box-reservas {
     background-color: var(--background-four);
     padding: 20px;
     margin-top: 30px;
 }
-.box-clases ul {
+.box-reservas ul {
     list-style-type: none;
     padding: 20px;
 }
 
-  .box-clases li {
+  .box-reservas li {
     display: inline-block;
     width: 30px;
     height: 30px;
     margin: 5px;
-    /* border-radius: 50%; */
-    /* background-color: white;
+    border-radius: 50%;
+    background-color: white;
   }
   /* clases reservadas */
-  /* .box-clases .reserved {
+  .box-reservas .reserved {
     position: relative;
     border: 1px solid #A02334;
   }
-  .box-clases .reserved::after {
+  .box-reservas .reserved::after {
     color: #A02334;
     content: "x";
     font-weight: 600;
@@ -77,7 +80,7 @@
     left: 6px;
   }
   /* clases disponibles */
-  /* .box-clases .available {
+  .box-reservas .available {
     background-color: #06D001;
     border: 1px solid var(--background-one);
-  } */ 
+  }

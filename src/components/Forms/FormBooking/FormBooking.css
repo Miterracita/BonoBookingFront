@@ -27,7 +27,13 @@
     font-size: 30px;
     font-weight: 600;
 }
-
+.box-booking-form h3 {
+    font-size: 20px;
+    color: var(--background-one);
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
 .box-form-booking {
     padding: 50px;
     border: 1px solid white;
@@ -44,10 +50,16 @@
 }
 .f-booking-item {
     margin: 10px;
+    display: flex;
+    gap:10px;
 }
-.f-booking-item input{
-    margin-right: 10px;
+.f-booking-item p {
+    font-weight: 600;
 }
+.f-booking-item p span{
+    font-weight: 400;
+}
+
 /* mobile */
 @media (max-width: 767px) {
     .box-booking-form {
