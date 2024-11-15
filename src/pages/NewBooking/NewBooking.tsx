@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 
-import NavBar from '../../components/NavBar/NavBar.tsx';
-import FormBooking from '../../components/Forms/FormBooking/FormBooking.tsx';
-import BonoUsers from '../../components/Items/BonoUser/BonoUser.tsx';
-import Logo from '../../components/Logo/Logo.tsx';
-import Modal from '../../components/Modal/Modal.tsx';
-import Wrapper from '../../components/Wrapper/Wrapper.tsx';
-import WrapperNav from '../../components/WrapperNav/WrapperNav.tsx';
+import NavBar from '../../components/NavBar/NavBar.js';
+import FormBooking from '../../components/Forms/FormBooking/FormBooking.js';
+import BonoUsers from '../../components/Items/BonoUser/BonoUser.js';
+import Logo from '../../components/Logo/Logo.js';
+import Modal from '../../components/Modal/Modal.js';
+import Wrapper from '../../components/Wrapper/Wrapper.js';
+import WrapperNav from '../../components/WrapperNav/WrapperNav.js';
 
 import './NewBooking.css'
 
@@ -19,7 +19,7 @@ import { formatDate } from '../../utils/date.ts';
 
 import useCommonReducer from '../../reducers/useCommonReducer.tsx';
 
-const NewBooking =(): JSX.Element => {
+const NewBooking =({}): JSX.Element => {
   const { state, setError, showModal, hideModal } = useCommonReducer(); //clearMessages
   const [bonos, setBonos] = useState<BonoData[] | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
