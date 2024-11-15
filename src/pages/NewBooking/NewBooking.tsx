@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 
-import Logo from '../../components/Logo/Logo.js';
 import NavBar from '../../components/NavBar/NavBar.tsx';
+import FormBooking from '../../components/Forms/FormBooking/FormBooking.tsx';
+import BonoUsers from '../../components/Items/BonoUser/BonoUser.tsx';
+import Logo from '../../components/Logo/Logo.tsx';
+import Modal from '../../components/Modal/Modal.tsx';
 import Wrapper from '../../components/Wrapper/Wrapper.tsx';
 import WrapperNav from '../../components/WrapperNav/WrapperNav.tsx';
-import FormBooking from '../../components/Forms/FormBooking/FormBooking.tsx';
-import Modal from '../../components/Modal/Modal.tsx';
-import BonoUsers from '../../components/Items/BonoUser/BonoUser.tsx';
-import Notification from '../../components/Notification/Notification.js';
 
 import './NewBooking.css'
 
@@ -20,9 +19,8 @@ import { formatDate } from '../../utils/date.ts';
 
 import useCommonReducer from '../../reducers/useCommonReducer.tsx';
 
-
-function NewBooking() {
-  const { state, setError, showModal, hideModal, clearMessages } = useCommonReducer();
+const NewBooking =(): JSX.Element => {
+  const { state, setError, showModal, hideModal } = useCommonReducer(); //clearMessages
   const [bonos, setBonos] = useState<BonoData[] | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
   
@@ -77,9 +75,9 @@ function NewBooking() {
     
   return (
     <div className="new-booking-page">
-        {state.error && <Notification message={state.error} type="error" onClose={clearMessages} />}
+        {/* {state.error && <Notification message={state.error} type="error" onClose={clearMessages} />}
         {state.notification && <Notification message={state.notification} type="success" onClose={clearMessages} />}
-     
+      */}
         <NavBar />    
         <WrapperNav>
           <div className='secondary-nav'>
