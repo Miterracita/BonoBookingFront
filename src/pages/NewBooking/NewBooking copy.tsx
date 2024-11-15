@@ -10,6 +10,7 @@ import Modal from '../../components/Modal/Modal.tsx';
 import BonoUsers from '../../components/Items/BonoUser/BonoUser.tsx';
 import Notification from '../../components/Notification/Notification.js';
 
+
 import './NewBooking.css'
 
 import { BonoData, UserData } from '../../components/Forms/FormBooking/types/index.ts';
@@ -20,12 +21,17 @@ import { formatDate } from '../../utils/date.ts';
 
 import useCommonReducer from '../../reducers/useCommonReducer.tsx';
 
+type BookingData = {
+  bono: BonoData | null;
+};
 
 function NewBooking() {
   const { state, setError, showModal, hideModal, clearMessages } = useCommonReducer();
   const [bonos, setBonos] = useState<BonoData[] | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
-  
+
+  const [initialData, setInitialData] = useState<BookingData>({ bono: null });
+
     // Sacamos la info del usuario que se ha identificado del token
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
@@ -46,6 +52,10 @@ function NewBooking() {
             const bonosData = await getBonosByUserId(user._id);
             setBonos(bonosData);
             
+            //Filtrar para obtener el bono activo
+            const activeBono = bonosData.find(bono => bono.isActive);
+            setInitialData({ bono: activeBono || null }); 
+
             console.log("Bonos asignados al usuario:", bonosData);
       
             if (!bonosData || bonosData.length === 0) {
@@ -57,10 +67,18 @@ function NewBooking() {
         }
     };
 
+    // Ejecutar la función para obtener el usuario al cargar el componente
     useEffect(() => {
       fetchUserData();
     }, []);
-  
+
+    // Ejecutar la función para obtener los bonos cuando se actualiza el usuario
+    useEffect(() => {
+      if (user) {
+        fetchBonos();
+      }
+    }, [user]);
+
     useEffect(() => {
       if (user) {
         fetchBonos();
@@ -77,7 +95,6 @@ function NewBooking() {
     
   return (
     <div className="new-booking-page">
-        {state.error && <Notification message={state.error} type="error" onClose={clearMessages} />}
         {state.notification && <Notification message={state.notification} type="success" onClose={clearMessages} />}
      
         <NavBar />    
@@ -102,22 +119,16 @@ function NewBooking() {
               <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#229799">
                   <path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/>
               </svg>
-              {user && (
-                <>
-                  Hola
-                  <span>{user.userName}</span>.
-                </>
-              )}
+              {user && `Hola ${user.userName}.`}
             </h2>
-            <p>Estos son tus bonos:</p>
+            <p>Estos son los bonos que tienes asignados:</p>
             <div className='box-new-booking-bonos'>
                 {bonos ? (
-                    bonos.map((bono: any) => (
+                    bonos.map((bono: BonoData) => (
                         <BonoUsers 
                           key={bono._id}
                           type={bono.type}
                           active={bono.active}
-                          reservations={bono.reservations}
                           id={bono._id}
                           expirationDate={formatDate(bono.expirationDate)}
                           name={bono.name}
@@ -128,9 +139,10 @@ function NewBooking() {
                     <p>No tienes bonos disponibles.</p>
                 )}
             </div>
+            {/* Mostrar solo si `showModal` es true */}
             {state.showModal && (
               <Modal showModal={state.showModal} onCloseModal={handleCloseModal}>   
-                <FormBooking />
+                <FormBooking initialData={initialData} />
               </Modal>
             )}
           </div>

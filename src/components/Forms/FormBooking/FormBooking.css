@@ -59,7 +59,15 @@
 .f-booking-item p span{
     font-weight: 400;
 }
-
+.box-event-list {
+    max-height: 300px;
+    overflow: auto;
+}
+.box-booking-form,
+.box-form-booking{
+    max-height: 500px;
+    overflow: auto;
+}
 /* mobile */
 @media (max-width: 767px) {
     .box-booking-form {

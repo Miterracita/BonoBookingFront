@@ -1,3 +1,6 @@
+.box-new-booking {
+    padding: 0 100px;
+}
 .new-booking-page .box-content {
     display: flex;
     padding: 30px;
@@ -35,4 +38,53 @@
 
 .new-booking-pager .link-box svg {
     fill: white;
+}
+
+.box-title-booking {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.box-title-booking h2 {
+    font-size: 30px;
+    color: var(--background-two);
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+.box-title-booking h2 span{
+    font-weight: 600;
+}
+.box-title-booking p {
+    font-size: 18px;
+    color: var(--background-one);
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+.box-new-booking-bonos {
+    display: flex;
+}
+
+/* tablet */
+@media (max-width: 1024px) {
+    .box-new-booking {
+        padding: 0 25px;
+    }
+}
+
+/* mobile */
+@media (max-width: 767px) {
+    .box-new-booking {
+        padding: 0px;
+    }
+    .new-booking-page .box-content {
+        flex-direction: column;
+    }
+    .new-booking-page .secondary-nav {
+        flex-direction: column;
+    }
+    .box-new-booking-bonos {
+        flex-direction: column;
+    }
 }

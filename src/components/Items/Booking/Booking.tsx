@@ -2,27 +2,28 @@ import { memo, useCallback } from 'react';
 
 import Notification from '../../Notification/Notification.js';
 import { AdminBoxButtons } from '../../AdminBoxButtons/AdminBoxButtons.js';
-
-// import Modal from '../../Modal/Modal.js';
+import FormBooking from '../../Forms/FormBooking/FormBooking.js';
+import Modal from '../../Modal/Modal.js';
 
 import './Booking.css';
 
 import useCommonReducer from '../../../reducers/useCommonReducer.js';
 
 import { deleteBooking } from '../../../services/apiServicesBookings.js';
-import FormBooking from '../../Forms/FormBooking/FormBooking.js';
-import Modal from '../../Modal/Modal.js';
 
-
-interface Bono {
+export interface Bono {
     _id: string;
     name: string;
-    type: string;
-    active: boolean;
-    code: string;
+    type: number,
+    active: boolean,
+    code: string,
+    // user?: UserData;
+    totalUses: number,
+    availableUses: number,
+    expirationDate?: string,
 }
 
-interface Events {
+export interface Evento {
     _id: string;
     name: string;
     description?: string;
@@ -34,16 +35,16 @@ interface Events {
 export interface BookingProps {
     _id: string;
     localizador: string;
-    eventos: Events[];
-    bono?: Bono[];
+    evento: Evento;
+    bono: Bono;
     refreshBookings: () => void; //funcion que se nos pasa desde userList
 }
 
 const Booking = memo (({
     _id,
     localizador,
-    eventos= [],
-    bono= [],
+    evento,
+    bono,
     refreshBookings,
 }: BookingProps): JSX.Element => {
     const {
@@ -53,7 +54,8 @@ const Booking = memo (({
         showModal,
         hideModal,
         clearMessages,
-      } = useCommonReducer();
+    } = useCommonReducer();
+    console.log("Recibiendo datos:", evento); // este componente recibe sólo el id del evento, debería recibir un objeto
 
     const handleDeleteBooking = useCallback(async () => {
         try {
@@ -90,35 +92,12 @@ const Booking = memo (({
             <div className="box-booking" key={_id}>
                 <div className='info-booking'>
                     <div className='txt'>
-                        <h3>{localizador}</h3>
-                        <p className='id'>ID: <span>{_id}</span></p>
+                        <h3>Localizador: {localizador}</h3>
+                        <p>Bono: {bono.code}</p>
+                        <p>Evento ID: {evento._id}</p>
+                        <p>Evento: {evento.name}</p>
+                        <p>Fecha: {evento.date}</p>
                     </div>
-                </div>
-                <div className="bonos-list">
-                    <h3>Bono asociado:</h3>
-                    {bono && bono.length === 0 ? (
-                        <p>No hay bonos disponibles para este usuario.</p>
-                    ) : (
-                        bono.map(b => (
-                            <div key={b._id} className="bono-item">
-                                <h4>{b.name}</h4>
-                                <p>Activo: {b.active ? 'Sí' : 'No'}</p>
-                            </div>
-                        ))
-                    )}
-                </div>
-                <div className="event-list">
-                    <h3>Evento asociado:</h3>
-                    {eventos && eventos.length === 0 ? (
-                        <p>No hay bonos disponibles para este usuario.</p>
-                    ) : (
-                        eventos.map(event => (
-                            <div key={event._id} className="bono-item">
-                                <h4>{event.name}</h4>
-                                <p>{event.date}</p>
-                            </div>
-                        ))
-                    )}
                 </div>
                 <AdminBoxButtons
                     handleUpdate={handleUpdateBooking}
@@ -130,12 +109,11 @@ const Booking = memo (({
                     <FormBooking
                         bookingId={_id}
                         onClose={handleCloseModal}// Prop para cerrar el formulario
-                        initialData={{
-                            _id: _id,
-                            localizador: localizador,
-                            eventos:eventos,
-                            bono: bono,
-                        }}
+                        // initialData={{
+                        //     _id: _id,
+                        //     localizador: localizador,
+                        // }}
+                        initialData={{ evento, bono, _id }}
                     />
                 </Modal>
             )}

@@ -8,7 +8,7 @@
         border-radius: 10px;
         box-shadow: 10px 10px 25px 8px rgba(230,230,230,1);
         display: grid;
-        grid-template-columns: 2fr 3fr 1fr;
+        grid-template-columns: 2fr 1fr;
         gap: 25px;
         align-items: flex-start;
     }

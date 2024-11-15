@@ -1,6 +1,6 @@
 // url producción
-// const API_URL = "https://bono-booking-back.vercel.app";
-const API_URL = "http://localhost:3000";
+const API_URL = "https://bono-booking-back.vercel.app";
+// const API_URL = "http://localhost:3000";
 
 // url local
 // const LOCAL_URL = "http://localhost:3000";
@@ -105,4 +105,21 @@ export const getSearch = async (name: any) => {
     throw error;
   }
   
+}
+
+export const getEventById = async (id: any) => {
+  
+  try {
+    console.log('ID del evento:', id);
+      const response = await fetch(`${API_URL}/events/${id}`); // URL del backend
+      if (!response.ok) {
+          throw new Error('Error al obtener el evento');
+      }
+      const events = await response.json();
+      return events;
+      
+    } catch (error) {
+      console.error('Error al obtener el evento:', error);
+      throw error;
+  }
 }

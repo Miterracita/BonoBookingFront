@@ -33,7 +33,7 @@ const FormBooking = ({
     const [error, setError] = useState<string | null>(null);
 
     const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null); //guardamos el evento seleccionado con su info completa
-    const [selectedBono, setSelectedBono] = useState<BonoData | null>(null);
+
     // Para poder realizar la reserva es necesario cargar previamente la info
     // de usuarios, bonos y eventos
 
@@ -69,7 +69,8 @@ const FormBooking = ({
             setError("Hubo un problema al obtener los bonos del usuario. Por favor, intenta de nuevo.");
           }
         }
-    };     
+      };
+      
     
     //fetch al listado de eventos
     const fetchEvents = async () => {
@@ -78,7 +79,7 @@ const FormBooking = ({
             setEvents(eventsData);
             console.log(eventsData);
         } catch (error: any) {
-            setError(error.message || 'Error al cargar los eventos');
+            setError(error.message || 'Error fetching events');
         }
     };
 
@@ -117,47 +118,48 @@ const FormBooking = ({
         // Verificar los datos antes de enviar
         console.log("Datos del formulario:", formData); 
 
-        if (!selectedBono) {
+        // Obtener el `id` del bono seleccionado
+        const { bonoId } = formData;
+
+        if (!bonoId) {
             console.error("No se seleccionó un bono.");
             setError("Por favor, selecciona un bono antes de continuar.");
             return;
         }
 
-        // if (selectedBono.availableUses=== 0) {
-        //     console.error("El bono seleccionado no tiene reservas disponibles, está inactivo");
-        //     setError("El bono seleccionado está inactivo, no tiene reservas disponibles");
-        //     return;
-        // }
-    
         try {
             const bookingData = {
-                event: selectedEvent,
-                bono: selectedBono,
+                event: selectedEvent, //aquí le pasamos el evento seleccionado en el formulario
+                bonoId,
                 // Otros datos de la reserva, si son necesarios
             };
-    
-            if (bookingId) { //aquí actualizamos un reserva que ya existe
+
+            if (bookingId) {
+                // Actualiza el bono si existe bonoId
                 await updateBooking(bookingId, bookingData);
                 setNotification(`Reserva actualizada correctamente`);
-    
-                if (onClose) {
+
+                {onClose && (
                     setTimeout(() => {
                         onClose();
-                    }, 2000);
-                }
-            } else { // aquí creamos una nueva reserva
+                    }, 2000)
+                )}
+
+            } else {
+                // Crea un nuevo bono si no existe bonoId
                 await newBooking(bookingData);
                 setNotification(`Reserva creada correctamente`);
-    
+
                 setTimeout(() => {
-                    navigate('/gestion-reservas');
-                }, 2000);
+                    navigate('/gestion-reservas'); // Redirige después de crear el bono
+                }, 2000)               
             }
-        } catch (error: any) {
-            console.error('Error:', error);
-            setError(error.message || (bookingId ? 'Error al actualizar la reserva' : 'Error al crear la reserva'));
-        }
-    }, [bookingId, navigate, onClose, selectedEvent, selectedBono]);
+        
+            } catch (error: any) {
+                console.error('Error:', error);
+                setError(error.message || (bookingId ? 'Error al actualizar la reserva' : 'Error al crear la reserva'));
+        } 
+    }, [bookingId, navigate, onClose, selectedEvent]);
 
     //cerrar las notificaciones
     const handleCloseNotification = useCallback(() => { 
@@ -172,16 +174,6 @@ const FormBooking = ({
             setSelectedEvent(eventObject);
         } else {
             console.error("Evento no encontrado");
-        }
-    };
-
-    const handleBonoChange = (event: any) => {
-        const bonoId = event.target.value;
-        const bonoObject = bonos.find(b => b._id === bonoId);
-        if (bonoObject) {
-            setSelectedBono(bonoObject);
-        } else {
-            console.error("Bono no encontrado");
         }
     };
 
@@ -230,7 +222,6 @@ const FormBooking = ({
                                     id={bono._id}
                                     value={bono._id}
                                     {...register("bonoId", { required: "Debes seleccionar un bono" })}
-                                    onChange={handleBonoChange}
                                 />
                                 <label htmlFor={bono._id}>
                                     {bono.name} - Código: {bono.code}

@@ -6,8 +6,6 @@ import SecondaryNavBar from '../../components/SecondaryNavBar/SecondaryNavBar.js
 import Notification from '../../components/Notification/Notification.js';
 import Wrapper from '../../components/Wrapper/Wrapper.js';
 import WrapperNav from '../../components/WrapperNav/WrapperNav.js';
-// import WrapperFiltros from '../../components/Forms/WrapperFiltros/WrapperFiltros.js';
-// import Button from '../../components/Button/Button.js';
 import Booking from '../../components/Items/Booking/Booking.js';
 
 import './BookingList.css'
@@ -59,31 +57,6 @@ function BookingList() {
             </svg>
             <span>Booking</span> List
           </h2>  
-          {/* <WrapperFiltros>
-            <form onSubmit={handleSearch} className='form-filtros-user-list'>
-              <h3>Puedes realizar la búsqueda de usuarios realizando los siguientes filtros:</h3>
-              <div className='box-form-filtros'>
-                <label>Username:</label>
-                <input
-                    type="text"
-                    placeholder="Buscar por username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <label>Email:</label>
-                <input
-                    type="email"
-                    placeholder="Buscar por email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <div className='b-buttons'>
-                  <Button color="dark" onClick={handleSearch} text="buscar" type="submit" />
-                  <Button color="light" onClick={clearFilters} text="Limpiar Filtros" type="button"/>
-                </div>
-              </div>
-            </form>
-          </WrapperFiltros>         */}
           <div className="list-bookings">
             {bookings && bookings.length === 0 ? (
                 <p>No hay reservas disponibles.</p>
@@ -94,7 +67,7 @@ function BookingList() {
                     _id={booking._id}
                     localizador={booking.localizador}
                     evento={booking.evento}
-                    bono={booking.bonos}
+                    bono={booking.bono}
                     refreshBookings={refreshBookings}
                   />
                 ))

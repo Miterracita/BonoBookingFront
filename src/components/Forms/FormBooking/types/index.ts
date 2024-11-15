@@ -8,7 +8,7 @@ export interface UserData {
 export interface BonoData {
     _id: string;
     name: string;
-    type: string,
+    type: number,
     active: boolean,
     code: string,
     user?: UserData;
@@ -29,8 +29,8 @@ export interface EventData {
 export interface BookingData {
     _id?: string;
     localizador?: string;
-    eventos?: EventData[];
-    bono?: BonoData[];
+    evento?: EventData;
+    bono?: BonoData; //aquí se tiene que enviar como objeto, no como array
 }
 
 export interface FormBookingProps {
