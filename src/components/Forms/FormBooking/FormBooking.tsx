@@ -25,7 +25,7 @@ const FormBooking = ({
     const { register, handleSubmit, reset, formState: { errors } } = useForm(); // Formulario
     const navigate = useNavigate(); // Hook para redirigir
 
-    const [bonos, setBonos] = useState<BonoData[] | null>(null);
+    const [bonos, setBonos] = useState<BonoData[]>([]);
     const [user, setUser] = useState<UserData | null>(null);
     const [events, setEvents] = useState<EventData[]>([]);
 
@@ -221,7 +221,7 @@ const FormBooking = ({
             </div>
             <h3>Selecciona el bono que deseas utilizar:</h3>
             <div>
-                {bonos ? (
+                {bonos && bonos.length > 0 ? (
                     bonos.map((bono) => (
                         <div key={bono._id}>
                             <div className="f-booking-item">
