@@ -8,6 +8,7 @@ import Logo from '../../components/Logo/Logo.js';
 import Modal from '../../components/Modal/Modal.js';
 import Wrapper from '../../components/Wrapper/Wrapper.js';
 import WrapperNav from '../../components/WrapperNav/WrapperNav.js';
+import Notification from '../../components/Notification/Notification.tsx';
 
 import './NewBooking.css'
 
@@ -19,8 +20,8 @@ import { formatDate } from '../../utils/date.ts';
 
 import useCommonReducer from '../../reducers/useCommonReducer.tsx';
 
-const NewBooking =({}): JSX.Element => {
-  const { state, setError, showModal, hideModal } = useCommonReducer(); //clearMessages
+const NewBooking =() => {
+  const { state, setError, showModal, hideModal, clearMessages } = useCommonReducer();
   const [bonos, setBonos] = useState<BonoData[] | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
   
@@ -75,9 +76,9 @@ const NewBooking =({}): JSX.Element => {
     
   return (
     <div className="new-booking-page">
-        {/* {state.error && <Notification message={state.error} type="error" onClose={clearMessages} />}
+        {state.error && <Notification message={state.error} type="error" onClose={clearMessages} />}
         {state.notification && <Notification message={state.notification} type="success" onClose={clearMessages} />}
-      */}
+     
         <NavBar />    
         <WrapperNav>
           <div className='secondary-nav'>
